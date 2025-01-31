@@ -1,7 +1,7 @@
 import os
 import psutil
 from telegram import Update
-from telegram.ext import Updater, CommandHandler, CallbackContext
+from telegram.ext import Application, CommandHandler, ContextTypes
 
 # Fungsi untuk memantau resource server
 def get_server_status():
@@ -11,35 +11,35 @@ def get_server_status():
     return f"CPU: {cpu_usage}%\nRAM: {memory_usage}%\nDisk: {disk_usage}%"
 
 # Command /start
-def start(update: Update, context: CallbackContext):
-    update.message.reply_text("Halo! Saya bot pemantau server. Gunakan /status untuk melihat resource server.")
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Halo! Saya bot pemantau server. Gunakan /status untuk melihat resource server.")
 
 # Command /status
-def status(update: Update, context: CallbackContext):
+async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
     status_message = get_server_status()
-    update.message.reply_text(status_message)
+    await update.message.reply_text(status_message)
 
 # Command /backup
-def backup(update: Update, context: CallbackContext):
+async def backup(update: Update, context: ContextTypes.DEFAULT_TYPE):
     os.system("./backup.sh")
     with open("/app/backups/backup.sql", "rb") as file:
-        update.message.reply_document(document=file, caption="Backup database selesai.")
+        await update.message.reply_document(document=file, caption="Backup database selesai.")
 
 # Main function
 def main():
     # Ambil token bot dari environment variable
     BOT_TOKEN = os.getenv("BOT_TOKEN")
-    updater = Updater(BOT_TOKEN, use_context=True)
-    dp = updater.dispatcher
+
+    # Buat aplikasi bot
+    application = Application.builder().token(BOT_TOKEN).build()
 
     # Tambahkan command handler
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CommandHandler("status", status))
-    dp.add_handler(CommandHandler("backup", backup))
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("status", status))
+    application.add_handler(CommandHandler("backup", backup))
 
     # Jalankan bot
-    updater.start_polling()
-    updater.idle()
+    application.run_polling()
 
 if __name__ == "__main__":
     main()
