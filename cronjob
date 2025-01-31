@@ -1,0 +1,2 @@
+# Jalankan backup setiap hari jam 2 pagi
+0 2 * * * root /app/backup.sh >> /var/log/cron.log 2>&1

@@ -1,0 +1,25 @@
+# Ignore file .env (berisi informasi sensitif)
+.env
+
+# Ignore direktori backups (berisi file backup database)
+/backups/
+
+# Ignore file log
+*.log
+
+# Ignore file Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore environment virtual Python
+venv/
+env/
+
+# Ignore file konfigurasi IDE
+.vscode/
+.idea/
+
+# Ignore file Docker build cache
+docker-compose.override.yml
