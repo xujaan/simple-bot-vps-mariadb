@@ -1,11 +1,11 @@
 # Gunakan image base Python 3.9
 FROM python:3.9-slim
 
+# Install cron dan mysql-client
+RUN apt-get update && apt-get install -y cron mariadb-client && apt-get clean
+
 # Set working directory di dalam container
 WORKDIR /app
-
-# Install cron dan dependencies
-RUN apt-get update && apt-get install -y cron && apt-get clean
 
 # Copy file requirements.txt ke container
 COPY requirements.txt .
