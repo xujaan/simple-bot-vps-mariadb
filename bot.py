@@ -105,6 +105,7 @@ def get_server_status():
 
     return status_message
 
+
 # Command /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Halo! Saya bot pemantau server. Gunakan /status untuk melihat resource server.")
@@ -116,9 +117,10 @@ async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # Command /backup
 async def backup(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # Jalankan script backup.sh
     os.system("./backup.sh")
-    with open("/app/backups/backup.sql", "rb") as file:
-        await update.message.reply_document(document=file, caption="Backup database selesai.")
+    # File backup akan dikirim dan dihapus oleh send_to_telegram.py
+    await update.message.reply_text("Proses backup sedang berjalan. File akan dikirim ke Telegram jika berhasil.")
 
 # Main function
 def main():
